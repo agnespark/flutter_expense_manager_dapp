@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
 
 // class
 contract ExpenseManagerContract {
@@ -17,8 +18,8 @@ contract ExpenseManagerContract {
         owner = msg.sender;
     }
 
-    modifier onluOwner() {
-        require (msg.sender == owner, "Only Owner can execute this");
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only Owner can execute this");
         _;
     }
 
@@ -62,31 +63,47 @@ contract ExpenseManagerContract {
     }
 
     // view : getting some data 만 하는 함수
-    function getBalance(address _account) public view return (uint) {
+    function getBalance(address _account) public view returns (uint) {
         return balances[_account];
     }
 
-    function getTransactionsCount() public view return (uint) {
+    function getTransactionsCount() public view returns (uint) {
         return transactions.length;
     }
 
-    function getTransaction(uint _index) public view return (address, uint, string memory, uint) {
+    function getTransaction(
+        uint _index
+    ) public view returns (address, uint, string memory, uint) {
         require(_index < transactions.length, "Index out of bounds");
         Transaction memory transaction = transactions[_index];
-        return (transaction.user, transaction.amount, transaction.reason, transaction.timestamp);
+        return (
+            transaction.user,
+            transaction.amount,
+            transaction.reason,
+            transaction.timestamp
+        );
     }
 
-    function getAllTransaction() public return view return (address[] memory, uint[] memory, string[] memory, uint[] memory){
+    function getAllTransaction()
+        public
+        view
+        returns (
+            address[] memory,
+            uint[] memory,
+            string[] memory,
+            uint[] memory
+        )
+    {
         address[] memory users = new address[](transactions.length);
         uint[] memory amounts = new uint[](transactions.length);
         string[] memory reasons = new string[](transactions.length);
         uint[] memory timestamps = new uint[](transactions.length);
 
-        for(uint i = 0; i < transactions.length; i++) {
+        for (uint i = 0; i < transactions.length; i++) {
             users[i] = transactions[i].user;
-            amounts[i] = transactions[i].amounts;
-            reasons[i] = transactions[i].reasons;
-            timestamps[i] = transactions[i].timestamps;
+            amounts[i] = transactions[i].amount;
+            reasons[i] = transactions[i].reason;
+            timestamps[i] = transactions[i].timestamp;
         }
         return (users, amounts, reasons, timestamps);
     }
@@ -94,6 +111,4 @@ contract ExpenseManagerContract {
     function changeOwner(address _newOwner) public onlyOwner {
         owner = _newOwner;
     }
-
-
 }
