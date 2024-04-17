@@ -21,6 +21,7 @@ class _DashboardPageState extends State<DashboardPage> {
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
               child: Container(
@@ -95,6 +96,55 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ],
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Text(
+              "Transactions",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: ListView(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 12),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.white),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              "assets/eth-logo.svg",
+                              height: 24,
+                              width: 24,
+                            ),
+                            const SizedBox(width: 6),
+                            const Text(
+                              "1 ETH",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                        const Text(
+                          "0xF2c4fC3DE42ED7E853f6d88fe1582C66B3eaD329",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        const Text(
+                          "NFT Purchase",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
