@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_expense_manager_dapp/features/deposit/deposit.dart';
+import 'package:flutter_expense_manager_dapp/features/withdraw/withdraw.dart';
 import 'package:flutter_expense_manager_dapp/utils/colors.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -56,19 +58,25 @@ class _DashboardPageState extends State<DashboardPage> {
             Row(
               children: [
                 Expanded(
-                  child: Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: AppColor.redAccent,
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "- DEBIT",
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold),
+                  child: InkWell(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const WithdrawPage())),
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: AppColor.redAccent,
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "- DEBIT",
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
@@ -77,19 +85,25 @@ class _DashboardPageState extends State<DashboardPage> {
                   width: 8,
                 ),
                 Expanded(
-                  child: Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: AppColor.greenAccent,
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "+ CREDIT",
-                        style: TextStyle(
-                            color: Colors.green,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold),
+                  child: InkWell(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const DepositPage())),
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: AppColor.greenAccent,
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "+ CREDIT",
+                          style: TextStyle(
+                              color: Colors.green,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
