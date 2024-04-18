@@ -1,10 +1,22 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-// class
 contract ExpenseManagerContract {
     address public owner;
-    // interface (데이터 타입)
+
+    event Deposit(
+        address indexed _from,
+        uint _amount,
+        string _reason,
+        uint _timestamp
+    );
+    event Withdrawal(
+        address indexed _to,
+        uint _amount,
+        string _reason,
+        uint _timestamp
+    );
+
     struct Transaction {
         address user;
         uint amount;
@@ -12,6 +24,7 @@ contract ExpenseManagerContract {
         uint timestamp;
     }
 
+    mapping(address => uint) public balances;
     Transaction[] public transactions;
 
     constructor() {
@@ -19,32 +32,15 @@ contract ExpenseManagerContract {
     }
 
     modifier onlyOwner() {
-        require(msg.sender == owner, "Only Owner can execute this");
+        require(
+            msg.sender == owner,
+            "Only contract owner can call this function"
+        );
         _;
     }
 
-    // mapping (주소 : 잔액) : 각 주소의 잔액 저장
-    mapping(address => uint) public balances;
-
-    // event : smart contract에서 발생한 이벤트 기록 (블록체인에 영구적으로 기록)
-    event Deposit(
-        address indexed _from,
-        uint amount,
-        string _reason,
-        uint timestamp
-    );
-
-    event Withdraw(
-        address indexed _from,
-        uint amount,
-        string _reason,
-        uint timestamp
-    );
-
-    // function : smart contract에서 실행 가능한 코드 조각
-    // payable : 이더를 전송할 수 있는 함수임을 나타냄,
     function deposit(uint _amount, string memory _reason) public payable {
-        require(_amount > 0, "Deposit amount should be greater than 0");
+        require(_amount > 0, "Deposit amount must be greater than 0");
         balances[msg.sender] += _amount;
         transactions.push(
             Transaction(msg.sender, _amount, _reason, block.timestamp)
@@ -59,10 +55,9 @@ contract ExpenseManagerContract {
             Transaction(msg.sender, _amount, _reason, block.timestamp)
         );
         payable(msg.sender).transfer(_amount);
-        emit Withdraw(msg.sender, _amount, _reason, block.timestamp);
+        emit Withdrawal(msg.sender, _amount, _reason, block.timestamp);
     }
 
-    // view : getting some data 만 하는 함수
     function getBalance(address _account) public view returns (uint) {
         return balances[_account];
     }
@@ -74,7 +69,10 @@ contract ExpenseManagerContract {
     function getTransaction(
         uint _index
     ) public view returns (address, uint, string memory, uint) {
-        require(_index < transactions.length, "Index out of bounds");
+        require(
+            _index < transactions.length,
+            "Transaction index out of bounds"
+        );
         Transaction memory transaction = transactions[_index];
         return (
             transaction.user,
@@ -84,7 +82,7 @@ contract ExpenseManagerContract {
         );
     }
 
-    function getAllTransaction()
+    function getAllTransactions()
         public
         view
         returns (
@@ -105,6 +103,7 @@ contract ExpenseManagerContract {
             reasons[i] = transactions[i].reason;
             timestamps[i] = transactions[i].timestamp;
         }
+
         return (users, amounts, reasons, timestamps);
     }
 

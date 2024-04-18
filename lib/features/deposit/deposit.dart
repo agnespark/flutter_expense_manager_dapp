@@ -1,8 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_expense_manager_dapp/features/dashboard/bloc/dashboard_bloc.dart';
+import 'package:flutter_expense_manager_dapp/models/transaction_model.dart';
 import 'package:flutter_expense_manager_dapp/utils/colors.dart';
 
 class DepositPage extends StatefulWidget {
-  const DepositPage({super.key});
+  final DashboardBloc dashboardBloc;
+  const DepositPage({super.key, required this.dashboardBloc});
 
   @override
   State<DepositPage> createState() => _DepositPageState();
@@ -11,12 +16,11 @@ class DepositPage extends StatefulWidget {
 class _DepositPageState extends State<DepositPage> {
   final TextEditingController addressController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
-  final TextEditingController reasonController = TextEditingController();
-
+  final TextEditingController reasonsController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.greenAccent,
+      backgroundColor: AppColors.greenAccent,
       body: Container(
         margin: const EdgeInsets.all(16),
         child: Column(
@@ -28,32 +32,42 @@ class _DepositPageState extends State<DepositPage> {
               style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            TextField(
-              controller: addressController,
-              decoration: const InputDecoration(hintText: "Enter the Address"),
-            ),
+            // TextField(
+            //   controller: addressController,
+            //   decoration: InputDecoration(hintText: "Enter the Address"),
+            // ),
             TextField(
               controller: amountController,
               decoration: const InputDecoration(hintText: "Enter the Amount"),
             ),
             TextField(
-              controller: reasonController,
+              controller: reasonsController,
               decoration: const InputDecoration(hintText: "Enter the Reason"),
             ),
             const SizedBox(height: 20),
-            Container(
-              height: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.green,
-              ),
-              child: const Center(
-                child: Text(
-                  "+ DEPOSIT",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold),
+            InkWell(
+              onTap: () {
+                widget.dashboardBloc.add(DashboardDepositEvent(
+                    transactionModel: TransactionModel(
+                        addressController.text,
+                        int.parse(amountController.text),
+                        reasonsController.text,
+                        DateTime.now())));
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: 50,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.green),
+                child: const Center(
+                  child: Text(
+                    "+ DEPOSIT",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ),
